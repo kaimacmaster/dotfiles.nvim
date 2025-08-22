@@ -95,20 +95,11 @@ return {
       local util = require('lspconfig.util')
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-      -- Pick the right Vue server name for your lspconfig version
-      local vue_server = (lspconfig.configs.vue_ls and 'vue_ls') or 'volar'
+      -- Use vue_ls as the Vue language server
+      local vue_server = 'vue_ls'
 
       -- Resolve @vue/typescript-plugin from mason (with a safe fallback)
-      local vue_plugin_location = (function()
-        local ok, mr = pcall(require, 'mason-registry')
-        if ok then
-          local pkg = mr.get_package('vue-language-server')
-          if pkg and pkg:is_installed() then
-            return pkg:get_install_path() .. '/node_modules/@vue/language-server'
-          end
-        end
-        return vim.fn.stdpath('data') .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
-      end)()
+      local vue_plugin_location = vim.fn.stdpath('data') .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
 
       -- Monorepo-friendly root detector with sane fallback
       local function mono_root(fname)
