@@ -1,5 +1,12 @@
--- You can add your own plugins here or in other files in this directory!
---  I promise not to create any merge conflicts in this directory :)
---
--- See the kickstart.nvim README for more information
-return {}
+-- Custom plugins organized by category
+return {
+  -- Utility plugins
+  'NMAC427/guess-indent.nvim',
+
+  -- Import organized plugin modules
+  { import = 'custom.plugins.ui' },
+  { import = 'custom.plugins.telescope' },
+  { import = 'custom.plugins.lsp' },
+  { import = 'custom.plugins.coding' },
+  { import = 'custom.plugins.git' },
+}
