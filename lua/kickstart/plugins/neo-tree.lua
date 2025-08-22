@@ -14,10 +14,34 @@ return {
     { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
   },
   opts = {
+    default_component_configs = {
+      icon = {
+        folder_closed = "+",
+        folder_open = "-",
+        folder_empty = "+",
+        folder_empty_open = "-",
+        default = " ",
+      },
+      git_status = {
+        symbols = {
+          added     = "A",
+          deleted   = "D",
+          modified  = "M",
+          renamed   = "R",
+          untracked = "?",
+          ignored   = "I",
+          unstaged  = "U",
+          staged    = "S",
+          conflict  = "C",
+        }
+      },
+    },
     filesystem = {
       window = {
         mappings = {
           ['\\'] = 'close_window',
+          ['l'] = 'open',
+          ['h'] = 'close_node',
         },
       },
     },
