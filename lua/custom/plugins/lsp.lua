@@ -91,7 +91,65 @@ return {
         },
       }
 
+      local lspconfig = require('lspconfig')
+      local util = require('lspconfig.util')
       local capabilities = require('blink.cmp').get_lsp_capabilities()
+
+      -- Pick the right Vue server name for your lspconfig version
+      local vue_server = (lspconfig.configs.vue_ls and 'vue_ls') or 'volar'
+
+      -- Resolve @vue/typescript-plugin from mason (with a safe fallback)
+      local vue_plugin_location = (function()
+        local ok, mr = pcall(require, 'mason-registry')
+        if ok then
+          local pkg = mr.get_package('vue-language-server')
+          if pkg and pkg:is_installed() then
+            return pkg:get_install_path() .. '/node_modules/@vue/language-server'
+          end
+        end
+        return vim.fn.stdpath('data') .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+      end)()
+
+      -- Monorepo-friendly root detector with sane fallback
+      local function mono_root(fname)
+        return util.root_pattern(
+          'pnpm-workspace.yaml',
+          'turbo.json',
+          'lerna.json',
+          'nx.json',
+          'nuxt.config.ts',
+          'nuxt.config.js',
+          'tsconfig.json',
+          'package.json',
+          '.git'
+        )(fname)
+        or util.find_git_ancestor(fname)
+        or util.path.dirname(fname)
+      end
+
+      -- TS server that also handles .vue and loads the Vue TS plugin
+      local ts_filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'vue' }
+      local vue_ts_plugin = { name = '@vue/typescript-plugin', location = vue_plugin_location, languages = { 'vue' } }
+
+      lspconfig.vtsls.setup {
+        capabilities = capabilities,
+        filetypes = ts_filetypes,
+        root_dir = mono_root,
+        single_file_support = true,
+        settings = {
+          vtsls = {
+            tsserver = { globalPlugins = { vue_ts_plugin } },
+          },
+        },
+      }
+
+      -- Vue language server (volar v3). Works with either 'vue_ls' or 'volar'
+      lspconfig[vue_server].setup {
+        capabilities = capabilities,
+        filetypes = { 'vue' },
+        init_options = { vue = { hybridMode = false } },
+        root_dir = mono_root,
+      }
 
       local servers = {
         -- CSS/SCSS support
@@ -118,48 +176,21 @@ return {
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      -- If you use mason-lspconfig handlers, skip these two so they aren't set up twice
       require('mason-lspconfig').setup {
         ensure_installed = {},
         automatic_installation = false,
         handlers = {
           function(server_name)
-            -- Skip ts_ls to avoid conflict with vtsls
-            if server_name == 'ts_ls' then
+            if server_name == 'vtsls' or server_name == 'vue_ls' or server_name == 'volar' then
               return
             end
             local server = servers[server_name] or {}
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            lspconfig[server_name].setup(server)
           end,
         },
       }
-
-      local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
-
-      local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
-      local vue_plugin = {
-        name = '@vue/typescript-plugin',
-        location = vue_language_server_path,
-        languages = { 'vue' },
-        configNamespace = 'typescript',
-      }
-      local vtsls_config = {
-        settings = {
-          vtsls = {
-            tsserver = {
-              globalPlugins = {
-                vue_plugin,
-              },
-            },
-          },
-        },
-        filetypes = tsserver_filetypes,
-      }
-
-      local vue_ls_config = {}
-      vim.lsp.config('vtsls', vtsls_config)
-      vim.lsp.config('vue_ls', vue_ls_config)
-      vim.lsp.enable { 'vtsls', 'vue_ls' }
     end,
   },
 }

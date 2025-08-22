@@ -1,160 +1,83 @@
-# kickstart.nvim
+# Kai's Neovim Configuration
 
-## Introduction
+**Personal Neovim dotfiles for Vue/Nuxt development at Ikigai & YourParkingSpace (minimum Vue 3)**
 
-A starting point for Neovim that is:
+This is my personal Neovim configuration optimised for modern web development, with a focus on Vue.js, Nuxt.js, and TypeScript. Built for my work at [Ikigai](https://ikigai.agency), a web development agency specializing in Vue/Nuxt applications.
 
-* Small
-* Single-file
-* Completely Documented
+## Features
 
-**NOT** a Neovim distribution, but instead a starting point for your configuration.
+- **Vue/Nuxt Optimized**: Tailored LSP configuration for Vue SFC files and Nuxt projects
+- **Monorepo Friendly**: Smart root detection for complex project structures
+- **Modern Tooling**: Blink.cmp for completion, Telescope for fuzzy finding, Treesitter for syntax highlighting
+- **TypeScript Ready**: Full TypeScript support with intelligent Vue integration
+- **Developer Experience**: Carefully crafted keybindings and workflows for efficient coding
+
+## Key Components
+
+- **LSP**: Configured for TypeScript/JavaScript (vtsls) and Vue (vue-language-server) with monorepo support
+- **Completion**: Blink.cmp with intelligent suggestions and snippets
+- **File Navigation**: Telescope with custom keybindings optimized for Vue projects  
+- **Syntax**: Treesitter with Vue, TypeScript, and web technology parsers
+- **Git Integration**: Fugitive and other git tools for version control workflows
+- **Terminal**: Integrated terminal support for development workflows
 
 ## Installation
 
-### Install Neovim
-
-Kickstart.nvim targets *only* the latest
-['stable'](https://github.com/neovim/neovim/releases/tag/stable) and latest
-['nightly'](https://github.com/neovim/neovim/releases/tag/nightly) of Neovim.
-If you are experiencing issues, please make sure you have the latest versions.
-
-### Install External Dependencies
-
-External Requirements:
-- Basic utils: `git`, `make`, `unzip`, C Compiler (`gcc`)
-- [ripgrep](https://github.com/BurntSushi/ripgrep#installation),
-  [fd-find](https://github.com/sharkdp/fd#installation)
-- Clipboard tool (xclip/xsel/win32yank or other depending on the platform)
-- A [Nerd Font](https://www.nerdfonts.com/): optional, provides various icons
-  - if you have it set `vim.g.have_nerd_font` in `init.lua` to true
-- Emoji fonts (Ubuntu only, and only if you want emoji!) `sudo apt install fonts-noto-color-emoji`
-- Language Setup:
-  - If you want to write Typescript, you need `npm`
-  - If you want to write Golang, you will need `go`
-  - etc.
-
-> [!NOTE]
-> See [Install Recipes](#Install-Recipes) for additional Windows and Linux specific notes
-> and quick install snippets
-
-### Install Kickstart
-
-> [!NOTE]
-> [Backup](#FAQ) your previous configuration (if any exists)
-
-Neovim's configurations are located under the following paths, depending on your OS:
-
-| OS | PATH |
-| :- | :--- |
-| Linux, MacOS | `$XDG_CONFIG_HOME/nvim`, `~/.config/nvim` |
-| Windows (cmd)| `%localappdata%\nvim\` |
-| Windows (powershell)| `$env:LOCALAPPDATA\nvim\` |
-
-#### Recommended Step
-
-[Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) this repo
-so that you have your own copy that you can modify, then install by cloning the
-fork to your machine using one of the commands below, depending on your OS.
-
-> [!NOTE]
-> Your fork's URL will be something like this:
-> `https://github.com/<your_github_username>/kickstart.nvim.git`
-
-You likely want to remove `lazy-lock.json` from your fork's `.gitignore` file
-too - it's ignored in the kickstart repo to make maintenance easier, but it's
-[recommended to track it in version control](https://lazy.folke.io/usage/lockfile).
-
-#### Clone kickstart.nvim
-
-> [!NOTE]
-> If following the recommended step above (i.e., forking the repo), replace
-> `nvim-lua` with `<your_github_username>` in the commands below
-
-<details><summary> Linux and Mac </summary>
-
-```sh
-git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+```bash
+git clone https://github.com/kaimacmaster/dotfiles.nvim ~/.config/nvim
 ```
 
-</details>
-
-<details><summary> Windows </summary>
-
-If you're using `cmd.exe`:
+## Structure
 
 ```
-git clone https://github.com/nvim-lua/kickstart.nvim.git "%localappdata%\nvim"
+├── init.lua              # Entry point
+├── lua/custom/
+│   ├── keymaps.lua       # Custom keybindings
+│   ├── options.lua       # Vim options and settings
+│   └── plugins/          # Plugin configurations
+│       ├── lsp.lua       # LSP setup (Vue/TS optimized)
+│       ├── completion.lua # Blink.cmp configuration
+│       └── ...
 ```
 
-If you're using `powershell.exe`
+## Vue/Nuxt Specific Features
 
-```
-git clone https://github.com/nvim-lua/kickstart.nvim.git "${env:LOCALAPPDATA}\nvim"
-```
-
-</details>
-
-### Post Installation
-
-Start Neovim
-
-```sh
-nvim
-```
-
-That's it! Lazy will install all the plugins you have. Use `:Lazy` to view
-the current plugin status. Hit `q` to close the window.
-
-#### Read The Friendly Documentation
-
-Read through the `init.lua` file in your configuration folder for more
-information about extending and exploring Neovim. That also includes
-examples of adding popularly requested plugins.
-
-> [!NOTE]
-> For more information about a particular plugin check its repository's documentation.
-
+- Intelligent component navigation and auto-completion
+- Nuxt auto-imports and composables support
+- Vue SFC template/script/style block navigation
+- Tailwind CSS integration for utility-first styling
+- Monorepo workspace detection for complex Vue projects
 
 ### Getting Started
 
-[The Only Video You Need to Get Started with Neovim](https://youtu.be/m8C0Cq9Uv9o)
+This configuration works best with Neovim 0.11+. Make sure you have the following dependencies installed:
 
-### FAQ
+- **Neovim** (>= 0.10)
+- **Git** (for plugin management)
+- **Node.js** (for LSP servers)
+- **fd** or **find** (for Telescope)
+- **ripgrep** (for searching)
 
-* What should I do if I already have a pre-existing Neovim configuration?
-  * You should back it up and then delete all associated files.
-  * This includes your existing init.lua and the Neovim files in `~/.local`
-    which can be deleted with `rm -rf ~/.local/share/nvim/`
-* Can I keep my existing configuration in parallel to kickstart?
-  * Yes! You can use [NVIM_APPNAME](https://neovim.io/doc/user/starting.html#%24NVIM_APPNAME)`=nvim-NAME`
-    to maintain multiple configurations. For example, you can install the kickstart
-    configuration in `~/.config/nvim-kickstart` and create an alias:
-    ```
-    alias nvim-kickstart='NVIM_APPNAME="nvim-kickstart" nvim'
-    ```
-    When you run Neovim using `nvim-kickstart` alias it will use the alternative
-    config directory and the matching local directory
-    `~/.local/share/nvim-kickstart`. You can apply this approach to any Neovim
-    distribution that you would like to try out.
-* What if I want to "uninstall" this configuration:
-  * See [lazy.nvim uninstall](https://lazy.folke.io/usage#-uninstalling) information
-* Why is the kickstart `init.lua` a single file? Wouldn't it make sense to split it into multiple files?
-  * The main purpose of kickstart is to serve as a teaching tool and a reference
-    configuration that someone can easily use to `git clone` as a basis for their own.
-    As you progress in learning Neovim and Lua, you might consider splitting `init.lua`
-    into smaller parts. A fork of kickstart that does this while maintaining the
-    same functionality is available here:
-    * [kickstart-modular.nvim](https://github.com/dam9000/kickstart-modular.nvim)
-  * Discussions on this topic can be found here:
-    * [Restructure the configuration](https://github.com/nvim-lua/kickstart.nvim/issues/218)
-    * [Reorganize init.lua into a multi-file setup](https://github.com/nvim-lua/kickstart.nvim/pull/473)
+### Customization
+
+Feel free to fork and modify this configuration to suit your needs. The structure is modular and designed to be easily customizable:
+
+- Add new plugins in `lua/custom/plugins/`
+- Modify keybindings in `lua/custom/keymaps.lua`
+- Adjust settings in `lua/custom/options.lua`
+
+### Vue/Nuxt Development Tips
+
+- Use `grd` on imports to jump to definitions across your project
+- `:LspInfo` to verify TypeScript and Vue language servers are attached
+- `<leader>my` to yank Neovim messages to system clipboard for debugging
+- Telescope shortcuts optimized for Vue project navigation
+
+---
 
 ### Install Recipes
 
 Below you can find OS specific install instructions for Neovim and dependencies.
-
-After installing all the dependencies continue with the [Install Kickstart](#Install-Kickstart) step.
 
 #### Windows Installation
 
@@ -238,4 +161,3 @@ sudo dnf install -y gcc make git ripgrep fd-find unzip neovim
 sudo pacman -S --noconfirm --needed gcc make git ripgrep fd unzip neovim
 ```
 </details>
-
