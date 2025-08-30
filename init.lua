@@ -1,7 +1,7 @@
 -- Load custom configuration modules
-require('custom.options')
-require('custom.keymaps')
-require('custom.autocmds')
+require 'custom.options'
+require 'custom.keymaps'
+require 'custom.autocmds'
 
 -- Install lazy.nvim plugin manager
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -25,4 +25,5 @@ require('lazy').setup({
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-}, require('custom.lazy-config'))
+}, require 'custom.lazy-config')
+

@@ -118,18 +118,18 @@ return {
         or util.path.dirname(fname)
       end
 
-      -- TS server that also handles .vue and loads the Vue TS plugin
-      local ts_filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'vue' }
-      local vue_ts_plugin = { name = '@vue/typescript-plugin', location = vue_plugin_location, languages = { 'vue' } }
-
-      lspconfig.vtsls.setup {
+      -- TypeScript server with Vue support
+      lspconfig.ts_ls.setup {
         capabilities = capabilities,
-        filetypes = ts_filetypes,
+        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
         root_dir = mono_root,
-        single_file_support = true,
-        settings = {
-          vtsls = {
-            tsserver = { globalPlugins = { vue_ts_plugin } },
+        init_options = {
+          plugins = {
+            {
+              name = '@vue/typescript-plugin',
+              location = vue_plugin_location,
+              languages = { 'vue' },
+            },
           },
         },
       }
@@ -155,6 +155,10 @@ return {
             },
           },
         },
+        -- Tailwind CSS support
+        tailwindcss = {
+          filetypes = { 'astro', 'astro-markdown', 'htmldjango', 'javascript', 'javascriptreact', 'markdown', 'svelte', 'typescript', 'typescriptreact', 'vue', 'html' }
+        },
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
@@ -162,7 +166,7 @@ return {
         'stylua',
         'css-lsp',
         'html-lsp',
-        'vtsls',
+        'typescript-language-server',
         'vue-language-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -173,7 +177,7 @@ return {
         automatic_installation = false,
         handlers = {
           function(server_name)
-            if server_name == 'vtsls' or server_name == 'vue_ls' or server_name == 'volar' then
+            if server_name == 'ts_ls' or server_name == 'vue_ls' or server_name == 'volar' then
               return
             end
             local server = servers[server_name] or {}

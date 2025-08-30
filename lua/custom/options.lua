@@ -32,7 +32,19 @@ vim.o.shiftwidth = 2
 vim.o.softtabstop = 2
 vim.o.smartindent = true
 
--- Sync clipboard with OS
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
+-- Check if clipboard-provider is executable
+if vim.fn.executable 'clipboard-provider' then
+  -- Set clipboard configuration
+  vim.g.clipboard = {
+    name = 'myClipboard',
+    copy = {
+      ['+'] = 'clipboard-provider copy',
+      ['*'] = 'clipboard-provider copy',
+    },
+    paste = {
+      ['+'] = 'clipboard-provider paste',
+      ['*'] = 'clipboard-provider paste',
+    },
+  }
+end
+
