@@ -48,3 +48,21 @@ if vim.fn.executable 'clipboard-provider' then
   }
 end
 
+if vim.fn.has 'wsl' == 1 then
+  vim.g.clipboard = {
+    name = 'WslClipboard',
+    copy = {
+      ['+'] = 'clip.exe',
+      ['*'] = 'clip.exe',
+    },
+    paste = {
+      ['+'] = function()
+        return vim.fn.systemlist "powershell.exe -Command Get-Clipboard | tr -d '\r'"
+      end,
+      ['*'] = function()
+        return vim.fn.systemlist "powershell.exe -Command Get-Clipboard | tr -d '\r'"
+      end,
+    },
+    cache_enabled = 0,
+  }
+end
