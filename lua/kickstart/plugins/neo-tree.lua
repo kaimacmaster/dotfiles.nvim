@@ -16,27 +16,42 @@ return {
   opts = {
     default_component_configs = {
       icon = {
-        folder_closed = "+",
-        folder_open = "-",
-        folder_empty = "+",
-        folder_empty_open = "-",
-        default = " ",
+        folder_closed = '+',
+        folder_open = '-',
+        folder_empty = '+',
+        folder_empty_open = '-',
+        default = ' ',
       },
       git_status = {
         symbols = {
-          added     = "A",
-          deleted   = "D",
-          modified  = "M",
-          renamed   = "R",
-          untracked = "?",
-          ignored   = "I",
-          unstaged  = "U",
-          staged    = "S",
-          conflict  = "C",
-        }
+          added = 'A',
+          deleted = 'D',
+          modified = 'M',
+          renamed = 'R',
+          untracked = '?',
+          ignored = 'I',
+          unstaged = 'U',
+          staged = 'S',
+          conflict = 'C',
+        },
       },
     },
     filesystem = {
+      filtered_items = {
+        visible = true,
+        hide_dotfiles = false,
+        hide_gitignored = false,
+        hide_by_name = {
+          'node_modules',
+          '.DS_Store',
+        },
+        always_show = { -- remains visible even if other settings would normally hide it
+          '.gitignore',
+        },
+        always_show_by_pattern = { -- uses glob style patterns
+          '.env*',
+        },
+      },
       window = {
         mappings = {
           ['\\'] = 'close_window',

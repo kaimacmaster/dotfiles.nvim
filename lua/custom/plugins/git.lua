@@ -2,6 +2,7 @@
 return {
   {
     'lewis6991/gitsigns.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
     opts = {
       signs = {
         add = { text = '+' },
@@ -17,7 +18,7 @@ return {
         delay = 300,
         ignore_whitespace = false,
       },
-      current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+      current_line_blame_formatter = '  <author>, <author_time:%Y-%m-%d> - <summary>',
     },
     keys = {
       { '<leader>tb', '<cmd>Gitsigns toggle_current_line_blame<CR>', desc = '[T]oggle Git [B]lame' },
