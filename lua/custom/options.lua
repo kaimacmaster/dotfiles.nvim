@@ -65,4 +65,30 @@ if vim.fn.has 'wsl' == 1 then
     },
     cache_enabled = 0,
   }
+elseif vim.fn.has 'mac' == 1 then
+  vim.g.clipboard = {
+    name = 'macOS',
+    copy = {
+      ['+'] = 'pbcopy',
+      ['*'] = 'pbcopy',
+    },
+    paste = {
+      ['+'] = 'pbpaste',
+      ['*'] = 'pbpaste',
+    },
+    cache_enabled = 0,
+  }
+elseif vim.fn.executable 'wl-copy' == 1 then
+  vim.g.clipboard = {
+    name = 'wl-clipboard',
+    copy = {
+      ['+'] = 'wl-copy',
+      ['*'] = 'wl-copy',
+    },
+    paste = {
+      ['+'] = 'wl-paste',
+      ['*'] = 'wl-paste',
+    },
+    cache_enabled = 0,
+  }
 end
