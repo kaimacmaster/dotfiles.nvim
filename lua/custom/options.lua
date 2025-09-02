@@ -25,6 +25,9 @@ vim.o.cursorline = true
 vim.o.scrolloff = 10
 vim.o.confirm = true
 
+-- Move command line above status line
+vim.o.cmdheight = 0
+
 -- Indentation settings
 vim.o.expandtab = true
 vim.o.tabstop = 2
