@@ -1,6 +1,9 @@
 -- Neo-tree is a Neovim plugin to browse the file system
 -- https://github.com/nvim-neo-tree/neo-tree.nvim
 
+-- Use backtick on macOS, backslash on other systems
+local tree_key = vim.fn.has('mac') == 1 and '`' or '\\'
+
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = '*',
@@ -11,7 +14,7 @@ return {
   },
   lazy = false,
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { tree_key, ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
   },
   opts = {
     default_component_configs = {
@@ -54,7 +57,7 @@ return {
       },
       window = {
         mappings = {
-          ['\\'] = 'close_window',
+          [tree_key] = 'close_window',
           ['l'] = 'open',
           ['h'] = 'close_node',
         },
