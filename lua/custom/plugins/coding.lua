@@ -1,5 +1,17 @@
 -- Coding-related plugins
 return {
+  -- Multi-cursor editing like VSCode
+  {
+    'mg979/vim-visual-multi',
+    event = { 'BufReadPre', 'BufNewFile' },
+    init = function()
+      vim.g.VM_maps = {
+        ['Find Under'] = '<C-d>',
+        ['Find Subword Under'] = '<C-d>',
+      }
+    end,
+  },
+
   -- Autoformat
   {
     'stevearc/conform.nvim',

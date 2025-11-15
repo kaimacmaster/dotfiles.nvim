@@ -4,6 +4,16 @@
 -- Use backtick on macOS, backslash on other systems
 local tree_key = vim.fn.has('mac') == 1 and '`' or '\\'
 
+-- Define keys table with conditional § key for macOS
+local keys = {
+  { tree_key, ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+}
+
+-- Add § key for macOS
+if vim.fn.has('mac') == 1 then
+  table.insert(keys, { '§', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true })
+end
+
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = '*',
@@ -13,9 +23,7 @@ return {
     'MunifTanjim/nui.nvim',
   },
   lazy = false,
-  keys = {
-    { tree_key, ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
-  },
+  keys = keys,
   opts = {
     default_component_configs = {
       icon = {
@@ -56,11 +64,11 @@ return {
         },
       },
       window = {
-        mappings = {
+        mappings = vim.tbl_extend('force', {
           [tree_key] = 'close_window',
           ['l'] = 'open',
           ['h'] = 'close_node',
-        },
+        }, vim.fn.has('mac') == 1 and { ['§'] = 'close_window' } or {}),
       },
     },
   },

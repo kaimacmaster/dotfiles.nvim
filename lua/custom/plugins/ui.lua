@@ -101,5 +101,26 @@ return {
       end
     end,
   },
+
+  -- Sticky context - shows current function/class at top while scrolling
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    event = { 'BufReadPre', 'BufNewFile' },
+    opts = {
+      max_lines = 3,
+      min_window_height = 20,
+      mode = 'cursor',
+      separator = nil,
+    },
+    keys = {
+      {
+        '<leader>tc',
+        function()
+          require('treesitter-context').toggle()
+        end,
+        desc = '[T]oggle [C]ontext',
+      },
+    },
+  },
 }
 
